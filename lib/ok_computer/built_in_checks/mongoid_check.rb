@@ -7,7 +7,9 @@ module OkComputer
     # session - The name of the Mongoid session to use. Defaults to the
     #   default session.
     def initialize(session = :default)
-      if Mongoid.respond_to?(:sessions)
+      if Mongoid.respond_to?(:clients) # Mongoid 4
+        self.session = Mongoid::Clients.with_name(session)
+      elsif Mongoid.respond_to?(:sessions) # Mongoid 3
         self.session = Mongoid::Sessions.with_name(session)
       end
     end
